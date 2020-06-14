@@ -10,11 +10,22 @@
        http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
 
+    <cxf:bus>
+        <cxf:inInterceptors>
+            <ref bean="encodingInterceptor"/>
+        </cxf:inInterceptors>
+    </cxf:bus>
+
     <camel-cxf:cxfEndpoint
             id="greeting-ws"
             address="/Greeting"
             serviceClass="org.dev.application.service.GreetingService"
             loggingFeatureEnabled="true">
+        <!--
+        <camel-cxf:inInterceptors>
+            <ref bean="encodingInterceptor"/>
+        </camel-cxf:inInterceptors>
+        -->
     </camel-cxf:cxfEndpoint>
 
     <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
