@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:camel="http://camel.apache.org/schema/spring"
+       xmlns:camel-cxf="http://camel.apache.org/schema/cxf"
+       xmlns:cxf="http://cxf.apache.org/core"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd
+       http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+    <camel-cxf:cxfEndpoint
+            id="greeting-ws"
+            address="/Greeting"
+            serviceClass="org.dev.application.service.GreetingService"
+            loggingFeatureEnabled="true">
+    </camel-cxf:cxfEndpoint>
+
+    <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
+        <route>
+            <from uri="cxf:bean:greeting-ws"/>
+            <choice>
+                <when>
+                    <simple>${in.header.operationName} == 'greet'</simple>
+                    <setBody>
+                        <simple>Hello ${body}!</simple>
+                    </setBody>
+                </when>
+            </choice>
+        </route>
+    </camelContext>
+
+</beans>
